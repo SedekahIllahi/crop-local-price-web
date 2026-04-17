@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alur Workflow Sigapan Diskominfo</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: #1a1a2e;
+            background: #f8f9fa;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 50px;
+            background: white;
+        }
+
+        /* Cover */
+        .cover {
+            text-align: center;
+            padding: 80px 20px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #0f4c81 0%, #1a73a7 50%, #2196F3 100%);
+            color: white;
+            border-radius: 12px;
+            page-break-after: always;
+        }
+        .cover h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        .cover .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        .cover .date {
+            margin-top: 30px;
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+        .cover .badge {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 6px 20px;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 20px;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+
+        /* Headers */
+        h2 {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #0f4c81;
+            margin: 40px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #e3f2fd;
+        }
+        h3 {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin: 24px 0 12px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: 0.88em;
+        }
+        th {
+            background: #0f4c81;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85em;
+            letter-spacing: 0.3px;
+        }
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #eee;
+        }
+        tr:nth-child(even) td { background: #f8f9fa; }
+        tr:hover td { background: #e3f2fd; }
+
+        /* Mermaid */
+        .mermaid-wrapper {
+            margin: 20px 0;
+            padding: 20px;
+            background: #fafbfc;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .mermaid-wrapper .mermaid {
+            display: inline-block;
+        }
+
+        /* Callouts */
+        .callout {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-size: 0.9em;
+        }
+        .callout-important {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+        .callout-note {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+        }
+        .callout strong { display: block; margin-bottom: 4px; }
+
+        /* Code */
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+        pre {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.82em;
+            line-height: 1.6;
+            margin: 12px 0;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        .json-key { color: #89b4fa; }
+        .json-val { color: #a6e3a1; }
+        .json-num { color: #fab387; }
+
+        /* Section breaks */
+        hr {
+            border: none;
+            height: 1px;
+            background: #e0e0e0;
+            margin: 30px 0;
+        }
+
+        /* Lists */
+        ul, ol { margin: 8px 0 8px 24px; }
+        li { margin-bottom: 4px; font-size: 0.92em; }
+
+        /* Page break hints */
+        .page-break { page-break-before: always; }
+
+        /* Print styles */
+        @media print {
+            body { background: white; }
+            .container { padding: 20px 30px; max-width: 100%; }
+            .cover { page-break-after: always; }
+            .no-print { display: none !important; }
+            h2 { page-break-after: avoid; }
+            table, .mermaid-wrapper { page-break-inside: avoid; }
+            .page-break { page-break-before: always; }
+        }
+
+        /* Print button */
+        .print-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #0f4c81;
+            padding: 12px 24px;
+            text-align: center;
+            z-index: 999;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .print-bar button {
+            background: white;
+            color: #0f4c81;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+        .print-bar button:hover { background: #e3f2fd; }
+        .print-bar span {
+            color: rgba(255,255,255,0.7);
+            margin-left: 16px;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Print Bar -->
+    <div class="print-bar no-print">
+        <button onclick="window.print()">📥 Download sebagai PDF</button>
+        <span>Gunakan "Save as PDF" pada dialog print</span>
+    </div>
+    <div style="height: 50px;" class="no-print"></div>
+
+    <div class="container">
+
+        <!-- Cover Page -->
+        <div class="cover">
+            <h1>Alur Workflow<br>Sigapan Diskominfo</h1>
+            <p class="subtitle">Sistem Informasi Pemantauan Harga dan Stok Bahan Pokok</p>
+            <div class="badge">DOKUMENTASI TEKNIS</div>
+            <p class="date">14 Februari 2026</p>
+        </div>
+
+        <!-- Overview -->
+        <h2>1. Overview</h2>
+        <p>Sigapan adalah sistem informasi pemantauan <strong>harga dan stok bahan pokok</strong> di pasar-pasar di wilayah Bantul. Sistem ini melibatkan 3 aktor utama dengan alur kerja terintegrasi.</p>
+
+        <div class="mermaid-wrapper">
+            <pre class="mermaid">
+graph TD
+    A["👤 Public User"] -->|Akses tanpa login| B["Landing Pages"]
+    C["👨‍💼 Lurah"] -->|Login| D["Dashboard Lurah"]
+    E["👨‍💻 Admin"] -->|Login| F["Dashboard Admin"]
+    D -->|Input harga draft| G["data_harga status=draft"]
+    F -->|Publish/Verify| H["data_harga status=verified"]
+    G -->|Menunggu verifikasi| H
+    H -->|Tampil di| B
+    style A fill:#e3f2fd
+    style C fill:#fff3e0
+    style E fill:#fce4ec
+    style H fill:#e8f5e9
+            </pre>
+        </div>
+
+        <hr>
+
+        <!-- Public User -->
+        <h2>2. Public User (Tanpa Login)</h2>
+        <p>Pengguna umum mengakses informasi harga melalui halaman publik. <strong>Hanya data <code>verified</code></strong> yang ditampilkan.</p>
+
+        <h3>Halaman Publik</h3>
+        <table>
+            <thead>
+                <tr><th>No</th><th>Halaman</th><th>URL</th><th>Fungsi</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td><strong>Sigapan Home</strong></td><td>/sigapan</td><td>Dashboard utama: harga hari ini, trend, peta pasar</td></tr>
+                <tr><td>2</td><td><strong>Tabel Harga</strong></td><td>/tabel-harga</td><td>Tabel harga per komoditas per hari (mingguan)</td></tr>
+                <tr><td>3</td><td><strong>Matriks Harga</strong></td><td>/matriks-harga</td><td>Matriks harga per komoditas per pasar + trend</td></tr>
+                <tr><td>4</td><td><strong>Trend Harga</strong></td><td>/trend-harga</td><td>Chart trend harga rata-rata per pasar</td></tr>
+                <tr><td>5</td><td><strong>Perbandingan</strong></td><td>/perbandingan-harga</td><td>Bar & line chart perbandingan antar pasar</td></tr>
+                <tr><td>6</td><td><strong>Daftar Pasar</strong></td><td>/daftar-pasar</td><td>List semua pasar aktif</td></tr>
+                <tr><td>7</td><td><strong>Detail Pasar</strong></td><td>/pasar/{id}</td><td>Detail informasi satu pasar</td></tr>
+                <tr><td>8</td><td><strong>PDF Export</strong></td><td>/tabel-harga/download</td><td>Download tabel harga sebagai PDF</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Alur Public User</h3>
+        <div class="mermaid-wrapper">
+            <pre class="mermaid">
+graph LR
+    A["Buka /sigapan"] --> B{"Pilih menu"}
+    B --> C["Tabel Harga"]
+    B --> D["Matriks Harga"]
+    B --> E["Trend Harga"]
+    B --> F["Perbandingan"]
+    B --> G["Daftar Pasar"]
+    C --> C1["Filter & Download PDF"]
+    D --> D1["Harga semua pasar"]
+    E --> E1["Chart rata-rata"]
+    F --> F1["Bandingkan pasar"]
+    G --> G1["Detail pasar"]
+            </pre>
+        </div>
+
+        <hr>
+        <div class="page-break"></div>
+
+        <!-- Lurah -->
+        <h2>3. Lurah (Login Required)</h2>
+        <p>Lurah bertanggung jawab menginput harga komoditas di pasar yang menjadi wilayahnya. Setiap Lurah di-assign ke satu pasar.</p>
+
+        <h3>Mapping Lurah → Pasar</h3>
+        <table>
+            <thead><tr><th>User ID</th><th>Pasar</th></tr></thead>
+            <tbody>
+                <tr><td>3</td><td>Pasar Bantul</td></tr>
+                <tr><td>4</td><td>Pasar Niten</td></tr>
+                <tr><td>5</td><td>Pasar Imogiri</td></tr>
+                <tr><td>6</td><td>Pasar Piyungan</td></tr>
+                <tr><td>7</td><td>Pasar Pundong</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Halaman Lurah</h3>
+        <table>
+            <thead><tr><th>Halaman</th><th>URL</th><th>Fungsi</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Dashboard</strong></td><td>/dashboard</td><td>Statistik: total komoditas, verified, pending</td></tr>
+                <tr><td><strong>Komoditas</strong></td><td>/lurah/komoditas</td><td>Input/update harga komoditas</td></tr>
+                <tr><td><strong>Stok</strong></td><td>/lurah/stok</td><td>Input/update stok bahan pokok</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Alur Input Harga oleh Lurah</h3>
+        <div class="mermaid-wrapper">
+            <pre class="mermaid">
+sequenceDiagram
+    participant L as Lurah
+    participant S as Sistem
+    participant DB as Database
+    participant A as Admin
+    L->>S: Login
+    S->>L: Dashboard (statistik pasar)
+    L->>S: Buka halaman Komoditas
+    S->>L: Daftar komoditas + harga terakhir
+    L->>S: Update harga komoditas
+    S->>DB: Simpan (status=draft)
+    S->>L: Menunggu verifikasi admin
+    Note over DB: Draft TIDAK tampil di publik
+    A->>S: Review dan Publish
+    S->>DB: Update status → verified
+    Note over DB: Verified TAMPIL di publik
+            </pre>
+        </div>
+
+        <div class="callout callout-important">
+            <strong>⚠️ Penting</strong>
+            Semua input harga dari Lurah otomatis berstatus <code>draft</code>. Data draft <strong>tidak akan tampil</strong> di halaman publik sampai Admin melakukan <strong>Publish/Verify</strong>.
+        </div>
+
+        <hr>
+        <div class="page-break"></div>
+
+        <!-- Admin -->
+        <h2>4. Admin (Login Required)</h2>
+        <p>Admin memiliki kontrol penuh atas data harga, stok, komoditas, pasar, dan pengguna.</p>
+
+        <h3>Roles</h3>
+        <table>
+            <thead><tr><th>Role</th><th>Deskripsi</th></tr></thead>
+            <tbody>
+                <tr><td><code>developer</code></td><td>Full access (semua permission)</td></tr>
+                <tr><td><code>superadmin</code></td><td>Admin level tertinggi</td></tr>
+                <tr><td><code>admin</code></td><td>Kelola harga & stok</td></tr>
+                <tr><td><code>user</code></td><td>Lurah (input harga)</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Halaman Admin</h3>
+        <table>
+            <thead><tr><th>Halaman</th><th>URL</th><th>Fungsi</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Dashboard</strong></td><td>/dashboard</td><td>Statistik: total user, pasar, komoditas, role</td></tr>
+                <tr><td><strong>Harga Bapok</strong></td><td>/pasar/{slug}/harga-bapok</td><td>Kelola harga harian per pasar</td></tr>
+                <tr><td><strong>Stok Bapok</strong></td><td>/pasar/{slug}/stok-bapok</td><td>Kelola stok mingguan per pasar</td></tr>
+                <tr><td><strong>Users</strong></td><td>/settings/users</td><td>CRUD pengguna</td></tr>
+                <tr><td><strong>Roles</strong></td><td>/settings/roles</td><td>CRUD role & permissions</td></tr>
+                <tr><td><strong>Navigation</strong></td><td>/settings/navs</td><td>Kelola sidebar menu</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Alur Admin — Kelola Harga</h3>
+        <div class="mermaid-wrapper">
+            <pre class="mermaid">
+sequenceDiagram
+    participant A as Admin
+    participant S as Sistem
+    participant DB as Database
+    participant P as Halaman Publik
+    A->>S: Buka harga-bapok
+    S->>A: Tabel harga + filter
+    A->>S: Edit harga atau review draft Lurah
+    S->>DB: updateHarga (status=draft)
+    A->>S: Centang record lalu Publish
+    S->>DB: publish (status=verified)
+    DB->>P: Data tampil di halaman publik
+            </pre>
+        </div>
+
+        <h3>Alur Admin — Tambah Komoditas Baru</h3>
+        <div class="mermaid-wrapper">
+            <pre class="mermaid">
+sequenceDiagram
+    participant A as Admin
+    participant S as Sistem
+    participant DB as Database
+    A->>S: Klik Tambah Komoditas
+    A->>S: Isi nama, satuan, harga acuan, kategori
+    S->>DB: Insert ke tabel komoditas
+    loop Setiap Pasar Monitored
+        S->>DB: Cek record hari ini
+        alt Ada record hari ini
+            S->>DB: Tambahkan ke data_harga
+        else Belum ada
+            S->>DB: Buat record baru + copy data terakhir
+        end
+    end
+    S->>A: Komoditas berhasil ditambahkan
+            </pre>
+        </div>
+
+        <hr>
+        <div class="page-break"></div>
+
+        <!-- Data Model -->
+        <h2>5. Data Model</h2>
+
+        <h3>Entity Relationship</h3>
+        <div class="mermaid-wrapper">
+            <pre class="mermaid">
+erDiagram
+    PASAR {
+        int id PK
+        string nama_pasar
+        string slug
+        boolean is_active
+        boolean is_monitored
+    }
+    KOMODITAS {
+        int id PK
+        string nama_komoditas
+        string satuan
+        decimal harga_acuan
+        int kategori_id FK
+        boolean is_active
+    }
+    HARGA_BAPOK_HARIAN {
+        int id PK
+        int id_pasar FK
+        date tanggal
+        json data_harga
+        string status
+        int created_by FK
+        int verified_by FK
+    }
+    KATEGORI_KOMODITAS {
+        int id PK
+        string nama_kategori
+    }
+    PASAR ||--o{ HARGA_BAPOK_HARIAN : "has many"
+    KATEGORI_KOMODITAS ||--o{ KOMODITAS : "has many"
+            </pre>
+        </div>
+
+        <h3>Struktur JSON <code>data_harga</code></h3>
+        <pre><code>{
+  <span class="json-key">"1"</span>: {
+    <span class="json-key">"harga"</span>: <span class="json-num">35000</span>,
+    <span class="json-key">"tanggal"</span>: <span class="json-val">"2026-02-14"</span>,
+    <span class="json-key">"status"</span>: <span class="json-val">"verified"</span>
+  },
+  <span class="json-key">"2"</span>: {
+    <span class="json-key">"harga"</span>: <span class="json-num">37000</span>,
+    <span class="json-key">"tanggal"</span>: <span class="json-val">"2026-02-14"</span>,
+    <span class="json-key">"status"</span>: <span class="json-val">"verified"</span>
+  }
+}</code></pre>
+        <ul>
+            <li><strong>Key</strong>: <code>komoditas.id</code></li>
+            <li><strong>harga</strong>: Harga dalam Rupiah</li>
+            <li><strong>tanggal</strong>: Tanggal update terakhir komoditas spesifik ini</li>
+            <li><strong>status</strong>: <code>draft</code> atau <code>verified</code></li>
+        </ul>
+
+        <div class="callout callout-note">
+            <strong>📝 Catatan</strong>
+            Field <code>tanggal</code> di dalam JSON berbeda dari kolom <code>tanggal</code> di tabel. Field JSON menunjukkan kapan <strong>komoditas spesifik</strong> terakhir diupdate, sedangkan kolom tabel menunjukkan tanggal record keseluruhan.
+        </div>
+
+        <hr>
+        <div class="page-break"></div>
+
+        <!-- End-to-End -->
+        <h2>6. Alur Lengkap End-to-End</h2>
+
+        <div class="mermaid-wrapper">
+            <pre class="mermaid">
+graph TB
+    subgraph INPUT
+        L["👨‍💼 Lurah"]
+        A["👨‍💻 Admin"]
+    end
+    subgraph PROSES
+        D1["Input Harga - status=draft"]
+        D2["Review dan Publish - status=verified"]
+        D3["Tambah Komoditas + Auto-inject"]
+    end
+    subgraph OUTPUT
+        P1["🏠 Sigapan Home"]
+        P2["📊 Tabel Harga"]
+        P3["📋 Matriks Harga"]
+        P4["📈 Trend Harga"]
+        P5["📉 Perbandingan"]
+    end
+    L -->|update harga| D1
+    A -->|update harga| D1
+    A -->|publish| D2
+    A -->|tambah komoditas| D3
+    D1 -->|menunggu| D2
+    D3 -->|langsung verified| D2
+    D2 --> P1
+    D2 --> P2
+    D2 --> P3
+    D2 --> P4
+    D2 --> P5
+    style D1 fill:#fff3e0
+    style D2 fill:#e8f5e9
+    style D3 fill:#e3f2fd
+            </pre>
+        </div>
+
+        <h3>Aturan Tampil Data</h3>
+        <table>
+            <thead><tr><th>Rule</th><th>Keterangan</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Hanya <code>verified</code></strong></td><td>Semua halaman publik hanya menampilkan data berstatus verified</td></tr>
+                <tr><td><strong>Harga &gt; 0</strong></td><td>Sigapan Home menyembunyikan komoditas dengan harga 0</td></tr>
+                <tr><td><strong>Tanggal cocok</strong></td><td>Tabel Harga hanya tampil jika tanggal update komoditas = tanggal record</td></tr>
+                <tr><td><strong>Pasar monitored</strong></td><td>Landing pages hanya menampilkan pasar dengan is_monitored = true</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Footer -->
+        <hr>
+        <p style="text-align: center; color: #999; font-size: 0.8em; margin-top: 30px;">
+            Sigapan Diskominfo — Dokumentasi Workflow v1.0 — 14 Februari 2026
+        </p>
+
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'default',
+            flowchart: { useMaxWidth: true },
+            sequence: { useMaxWidth: true }
+        });
+    </script>
+</body>
+</html>
